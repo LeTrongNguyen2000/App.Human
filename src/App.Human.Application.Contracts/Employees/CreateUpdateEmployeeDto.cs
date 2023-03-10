@@ -11,6 +11,8 @@ namespace App.Human.Employees
         [Required]
         public Guid Id { get; set; }
         [Required]
+        public string Code { get; set; }
+        [Required]
         [StringLength(50)]
         public string Name { get; set; }
         public float Salary { get; set; }

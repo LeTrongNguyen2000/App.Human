@@ -53,25 +53,27 @@ namespace App.Human.Departments
             };
         }
 
-        public async Task<DepartmentDto> UpdateAsync(Guid id, string deptName)
+        public async Task<DepartmentDto> UpdateAsync(string depCode, string deptName, string deptAddress)
         {
             //IQueryable<TodoItem> queryable = await _todoItemRepository.GetQueryableAsync();
-            var item = await _repository.GetAsync(x => x.Id == id);
+            var item = await _repository.GetAsync(x => x.DeptCode == depCode);
             if (item == null)
             {
                 return null;
             }
-            item.DeptName = deptName;
+            if (deptName != null) item.DeptName = deptName;
+            if (deptAddress != null) item.Address = deptAddress;
             await _repository.UpdateAsync(item);
             return new DepartmentDto
             {
-                DeptNameDto = item.DeptName
+                DeptNameDto = item.DeptName,
+                AddressDto = item.Address,
             };
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(string code)
         {
-            await _repository.DeleteAsync(id);
+            await _repository.DeleteAsync(x => x.DeptCode == code);
         }
     }
 }

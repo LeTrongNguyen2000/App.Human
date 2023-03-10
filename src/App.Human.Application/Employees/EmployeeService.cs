@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Authorization;
 using Volo.Abp.Domain.Repositories;
 
 namespace App.Human.Employees
@@ -49,8 +50,15 @@ namespace App.Human.Employees
                     DescriptionDto = item.ObjDepartment.Description,
                 }).ToList();
         }
-        public async Task<EmployeeDto> CreateAsync(string fullName, float salary, string address, string deptCode)
+        public async Task<EmployeeDto> CreateAsync(string code, string fullName, float salary, string address, string deptCode)
         {
+            //        var result = await AuthorizationService
+            //.AuthorizeAsync(HumanPermissions.Employees.Create);
+            //        if (result.Succeeded == false)
+            //        {
+            //            //throw exception
+            //            throw new AbpAuthorizationException("Ban khong co quyen them nhan vien!!!");
+            //        }
             var departmentItem = await _repositoryDepartment.GetAsync(x => x.DeptCode == deptCode);
             var departmentDtoItem = new DepartmentDto
             {
@@ -62,6 +70,7 @@ namespace App.Human.Employees
             var employeeItem = await _repositoryEmployee.InsertAsync(
                 new Employee
                 {
+                    Code = code,
                     FullName = fullName,
                     Salary = salary,
                     Address = address,
@@ -72,6 +81,7 @@ namespace App.Human.Employees
             return new EmployeeDto
             {
                 Id = employeeItem.Id,
+                Code = employeeItem.Code,
                 Name = employeeItem.FullName,
                 Salary = employeeItem.Salary,
                 Address = employeeItem.Address,
@@ -82,25 +92,32 @@ namespace App.Human.Employees
             };
         }
 
-        public async Task<EmployeeDto> UpdateAsync(Guid id, string fullName)
+        public async Task<EmployeeDto> UpdateAsync(string code, string fullName, float salary, string address)
         {
             //IQueryable<TodoItem> queryable = await _todoItemRepository.GetQueryableAsync();
-            var item = await _repositoryEmployee.GetAsync(x => x.Id == id);
+            var item = await _repositoryEmployee.GetAsync(x => x.Code == code);
             if (item == null)
             {
                 return null;
             }
-            item.FullName = fullName;
+            if (fullName != null)
+                item.FullName = fullName;
+            if (salary != 0)
+                item.Salary = salary;
+            if (address != null)
+                item.Address = address;
             await _repositoryEmployee.UpdateAsync(item);
             return new EmployeeDto
             {
-                Name = item.FullName
+                Name = item.FullName,
+                Salary = item.Salary,
+                Address = item.Address,
             };
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(string code)
         {
-            await _repositoryEmployee.DeleteAsync(id);
+            await _repositoryEmployee.DeleteAsync(x => x.Code == code);
         }
     }
 }

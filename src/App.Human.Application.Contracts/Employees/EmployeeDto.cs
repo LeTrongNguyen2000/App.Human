@@ -9,6 +9,7 @@ namespace App.Human.Employees
     public class EmployeeDto : AuditedEntityDto<Guid>
     {
         public Guid Id { get; set; }
+        public string Code { get; set; }
         public string Name { get; set; }
         public float Salary { get; set; }
         public string Address { get; set; }

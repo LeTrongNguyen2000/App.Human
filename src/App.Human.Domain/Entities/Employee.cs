@@ -7,6 +7,7 @@ namespace App.Human.Entities
 {
     public class Employee : BasicAggregateRoot<Guid>
     {
+        public string Code { get; set; }
         public string FullName { get; set; }
         public float Salary { get; set; }
         public string Address { get; set; }
