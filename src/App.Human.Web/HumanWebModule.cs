@@ -37,6 +37,8 @@ using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.Identity.Web.Navigation;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 
 namespace App.Human.Web;
 
@@ -48,11 +50,12 @@ namespace App.Human.Web;
     typeof(AbpIdentityWebModule),
     typeof(AbpSettingManagementWebModule),
     typeof(AbpAccountWebOpenIddictModule),
-    typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
+    typeof(AbpAspNetCoreMvcUiBasicThemeModule),
     typeof(AbpTenantManagementWebModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpSwashbuckleModule)
     )]
+
 public class HumanWebModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)

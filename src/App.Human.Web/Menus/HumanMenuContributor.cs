@@ -47,3 +47,4 @@ public class HumanMenuContributor : IMenuContributor
         administration.SetSubItemOrder(SettingManagementMenuNames.GroupName, 3);
     }
 }
+

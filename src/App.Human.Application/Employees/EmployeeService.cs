@@ -11,6 +11,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.PermissionManagement;
 
 namespace App.Human.Employees
 {
@@ -18,12 +19,14 @@ namespace App.Human.Employees
     {
         private readonly IRepository<Employee, Guid> _repositoryEmployee;
         private readonly IRepository<Department, Guid> _repositoryDepartment;
-        public EmployeeService(IRepository<Employee, Guid> repositoryEmployee, IRepository<Department, Guid> repositoryDepartment)
+        private readonly IPermissionManager _permissionManager;
+        public EmployeeService(IRepository<Employee, Guid> repositoryEmployee, IRepository<Department, Guid> repositoryDepartment, IPermissionManager permissionManager)
         {
             _repositoryEmployee = repositoryEmployee;
             _repositoryDepartment = repositoryDepartment;
+            _permissionManager = permissionManager;
         }
-        [Authorize(HumanPermissions.Employees.Default)]
+        //[Authorize(HumanPermissions.Employees.Default)]
         public async Task<List<EmployeeDto>> GetListAsync()
         {
             var lstEmployee = await _repositoryEmployee.GetListAsync();
@@ -52,13 +55,13 @@ namespace App.Human.Employees
         }
         public async Task<EmployeeDto> CreateAsync(string code, string fullName, float salary, string address, string deptCode)
         {
-            //        var result = await AuthorizationService
-            //.AuthorizeAsync(HumanPermissions.Employees.Create);
-            //        if (result.Succeeded == false)
-            //        {
-            //            //throw exception
-            //            throw new AbpAuthorizationException("Ban khong co quyen them nhan vien!!!");
-            //        }
+            //var result = await AuthorizationService
+            //    .AuthorizeAsync(HumanPermissions.Employees.Create);
+            //if (result.Succeeded == false)
+            //{
+            //    //throw exception
+            //    throw new AbpAuthorizationException("Ban khong co quyen them nhan vien!!!");
+            //}
             var departmentItem = await _repositoryDepartment.GetAsync(x => x.DeptCode == deptCode);
             var departmentDtoItem = new DepartmentDto
             {
